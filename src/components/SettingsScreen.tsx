@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
   TextInput,
-  TouchableOpacity,
+  Pressable,
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
@@ -25,6 +25,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({
 }) => {
   const [url, setUrl] = useState(currentUrl);
   const [focusedButton, setFocusedButton] = useState<string | null>(null);
+  const saveButtonRef = useRef<any>(null);
 
   const handleSave = async () => {
     if (!url.trim()) {
@@ -77,32 +78,31 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({
           </Text>
 
           <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={[
+            <Pressable
+              ref={saveButtonRef}
+              style={({focused}) => [
                 styles.saveButton,
-                focusedButton === 'save' && styles.saveButtonFocused,
+                focused && styles.saveButtonFocused,
               ]}
               onPress={handleSave}
               focusable={true}
-              accessible={true}
               hasTVPreferredFocus={true}
               onFocus={() => setFocusedButton('save')}
               onBlur={() => setFocusedButton(null)}>
               <Text style={styles.saveButtonText}>Save & Reload</Text>
-            </TouchableOpacity>
+            </Pressable>
 
-            <TouchableOpacity
-              style={[
+            <Pressable
+              style={({focused}) => [
                 styles.cancelButton,
-                focusedButton === 'cancel' && styles.cancelButtonFocused,
+                focused && styles.cancelButtonFocused,
               ]}
               onPress={onClose}
               focusable={true}
-              accessible={true}
               onFocus={() => setFocusedButton('cancel')}
               onBlur={() => setFocusedButton(null)}>
               <Text style={styles.cancelButtonText}>Cancel</Text>
-            </TouchableOpacity>
+            </Pressable>
           </View>
         </View>
       </ScrollView>

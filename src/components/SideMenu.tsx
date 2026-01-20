@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   View,
   Text,
-  TouchableOpacity,
+  Pressable,
   StyleSheet,
   Modal,
   Animated,
   Dimensions,
   BackHandler,
+  findNodeHandle,
+  TVFocusGuideView,
 } from 'react-native';
 
 interface SideMenuProps {
@@ -25,6 +27,7 @@ const SideMenu: React.FC<SideMenuProps> = ({
 }) => {
   const slideAnim = React.useRef(new Animated.Value(-300)).current;
   const [focusedItem, setFocusedItem] = useState<string | null>(null);
+  const firstButtonRef = useRef<any>(null);
 
   React.useEffect(() => {
     if (visible) {
@@ -33,7 +36,12 @@ const SideMenu: React.FC<SideMenuProps> = ({
         useNativeDriver: true,
         tension: 65,
         friction: 11,
-      }).start();
+      }).start(() => {
+        // Focus first button after animation completes
+        if (firstButtonRef.current) {
+          firstButtonRef.current.focus();
+        }
+      });
     } else {
       Animated.spring(slideAnim, {
         toValue: -300,
@@ -76,52 +84,50 @@ const SideMenu: React.FC<SideMenuProps> = ({
             <Text style={styles.headerText}>Kiosk Menu</Text>
           </View>
 
-          <TouchableOpacity
-            style={[
+          <Pressable
+            ref={firstButtonRef}
+            style={({focused}) => [
               styles.menuItem,
-              focusedItem === 'settings' && styles.menuItemFocused,
+              focused && styles.menuItemFocused,
             ]}
             onPress={() => {
               onClose();
               onOpenSettings();
             }}
             focusable={true}
-            accessible={true}
             hasTVPreferredFocus={true}
             onFocus={() => setFocusedItem('settings')}
             onBlur={() => setFocusedItem(null)}>
             <Text style={styles.menuItemText}>⚙️ Settings</Text>
             <Text style={styles.menuItemSubtext}>Change kiosk URL</Text>
-          </TouchableOpacity>
+          </Pressable>
 
-          <TouchableOpacity
-            style={[
+          <Pressable
+            style={({focused}) => [
               styles.menuItem,
-              focusedItem === 'exit' && styles.menuItemFocused,
+              focused && styles.menuItemFocused,
             ]}
             onPress={onExitApp}
             focusable={true}
-            accessible={true}
             onFocus={() => setFocusedItem('exit')}
             onBlur={() => setFocusedItem(null)}>
             <Text style={[styles.menuItemText, styles.exitText]}>
               🚪 Exit App
             </Text>
             <Text style={styles.menuItemSubtext}>Close the kiosk</Text>
-          </TouchableOpacity>
+          </Pressable>
 
-          <TouchableOpacity
-            style={[
+          <Pressable
+            style={({focused}) => [
               styles.closeButton,
-              focusedItem === 'close' && styles.closeButtonFocused,
+              focused && styles.closeButtonFocused,
             ]}
             onPress={onClose}
             focusable={true}
-            accessible={true}
             onFocus={() => setFocusedItem('close')}
             onBlur={() => setFocusedItem(null)}>
             <Text style={styles.closeButtonText}>✕ Close Menu</Text>
-          </TouchableOpacity>
+          </Pressable>
         </Animated.View>
       </View>
     </Modal>
