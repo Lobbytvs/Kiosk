@@ -5,11 +5,13 @@ A React Native application for Android TV (specifically Xiaomi Mi Box S Gen 3) t
 ## Features
 
 - Display a configurable web URL in fullscreen
+- **In-app settings menu** - Change URL without rebuilding (5 back presses)
+- **Persistent configuration** - URL saved across app restarts
 - Auto-start on device boot
-- Prevent user from exiting the app
+- Prevent user from exiting the app (with 5-tap menu access)
 - Keep screen awake
 - Handle crash recovery (auto-restart)
-- Override back button and home button behavior
+- Override home button behavior
 - Render at proper resolution (1080p/4K)
 - Hide Android navigation bar and status bar
 
@@ -110,6 +112,29 @@ adb shell pm disable-user --user 0 com.mitv.tvhome
 2. Click on "Build" 7 times
 3. Go to Developer Options
 4. Set "Smallest width" to 960 or 1280
+
+## Using the App
+
+### Accessing the Settings Menu
+
+The app includes a hidden menu that can be accessed without exiting kiosk mode:
+
+1. **Press the back button 5 times quickly** (within 3 seconds)
+2. A side menu will slide in from the left
+3. From the menu you can:
+   - **Settings**: Change the kiosk URL without rebuilding the app
+   - **Exit App**: Close the application
+
+### Changing the Kiosk URL
+
+1. Press back button 5 times to open the menu
+2. Tap "Settings"
+3. Enter the new URL (must include http:// or https://)
+4. Tap "Save & Reload"
+5. The WebView will automatically reload with the new URL
+6. The URL is saved and will persist across app restarts
+
+**Note**: The default URL on first install is `https://example.com` - make sure to change this!
 
 ## Testing Checklist
 
