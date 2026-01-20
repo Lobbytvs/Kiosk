@@ -1,9 +1,12 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { StyleSheet, View, ActivityIndicator } from 'react-native';
 import { WebView } from 'react-native-webview';
-import config from '../config';
 
-const KioskWebView = () => {
+interface KioskWebViewProps {
+  url: string;
+}
+
+const KioskWebView: React.FC<KioskWebViewProps> = ({ url }) => {
   const webViewRef = useRef<WebView>(null);
 
   const handleError = () => {
@@ -13,11 +16,18 @@ const KioskWebView = () => {
     }, 5000);
   };
 
+  // Reload when URL changes
+  useEffect(() => {
+    if (webViewRef.current && url) {
+      webViewRef.current.reload();
+    }
+  }, [url]);
+
   return (
     <View style={styles.container}>
       <WebView
         ref={webViewRef}
-        source={{ uri: config.kiosk_url }}
+        source={{ uri: url }}
         style={styles.webview}
         onError={handleError}
         startInLoadingState={true}
