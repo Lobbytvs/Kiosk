@@ -43,6 +43,19 @@ Kiosk/
 └── package.json
 ```
 
+## Download Pre-built APK
+
+The easiest way to get started is to download a pre-built APK from GitHub Actions:
+
+1. Go to the [Actions tab](../../actions) in this repository
+2. Click on the latest successful workflow run
+3. Scroll down to "Artifacts" section
+4. Download **app-release**
+5. Extract the ZIP file to get `app-release.apk`
+6. Install on your device: `adb install app-release.apk`
+
+The APK is automatically built whenever code is pushed to the repository.
+
 ## Installation & Setup
 
 ### 1. Install Dependencies
