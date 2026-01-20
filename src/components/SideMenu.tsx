@@ -6,10 +6,7 @@ import {
   StyleSheet,
   Modal,
   Animated,
-  Dimensions,
   BackHandler,
-  findNodeHandle,
-  TVFocusGuideView,
 } from 'react-native';
 
 interface SideMenuProps {
