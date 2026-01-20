@@ -66,11 +66,7 @@ const SideMenu: React.FC<SideMenuProps> = ({
       animationType="none"
       onRequestClose={onClose}>
       <View style={styles.overlay}>
-        <TouchableOpacity
-          style={styles.backdrop}
-          activeOpacity={1}
-          onPress={onClose}
-        />
+        <View style={styles.backdrop} />
         <Animated.View
           style={[
             styles.menu,
@@ -90,6 +86,7 @@ const SideMenu: React.FC<SideMenuProps> = ({
               onOpenSettings();
             }}
             focusable={true}
+            accessible={true}
             hasTVPreferredFocus={true}
             onFocus={() => setFocusedItem('settings')}
             onBlur={() => setFocusedItem(null)}>
@@ -104,6 +101,7 @@ const SideMenu: React.FC<SideMenuProps> = ({
             ]}
             onPress={onExitApp}
             focusable={true}
+            accessible={true}
             onFocus={() => setFocusedItem('exit')}
             onBlur={() => setFocusedItem(null)}>
             <Text style={[styles.menuItemText, styles.exitText]}>
@@ -119,6 +117,7 @@ const SideMenu: React.FC<SideMenuProps> = ({
             ]}
             onPress={onClose}
             focusable={true}
+            accessible={true}
             onFocus={() => setFocusedItem('close')}
             onBlur={() => setFocusedItem(null)}>
             <Text style={styles.closeButtonText}>✕ Close Menu</Text>
@@ -162,23 +161,25 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   menuItem: {
-    padding: 20,
+    padding: 30,
     borderBottomWidth: 1,
     borderBottomColor: '#2a2a2a',
+    borderWidth: 3,
+    borderColor: 'transparent',
   },
   menuItemFocused: {
-    backgroundColor: '#3a3a3a',
-    borderLeftWidth: 4,
-    borderLeftColor: '#4CAF50',
+    backgroundColor: '#4CAF50',
+    borderWidth: 3,
+    borderColor: '#fff',
   },
   menuItemText: {
-    fontSize: 18,
-    fontWeight: '600',
+    fontSize: 22,
+    fontWeight: 'bold',
     color: '#fff',
     marginBottom: 5,
   },
   menuItemSubtext: {
-    fontSize: 14,
+    fontSize: 16,
     color: '#888',
   },
   exitText: {
@@ -189,20 +190,22 @@ const styles = StyleSheet.create({
     bottom: 30,
     left: 20,
     right: 20,
-    padding: 15,
+    padding: 20,
     backgroundColor: '#2a2a2a',
     borderRadius: 8,
     alignItems: 'center',
+    borderWidth: 3,
+    borderColor: 'transparent',
   },
   closeButtonFocused: {
-    backgroundColor: '#3a3a3a',
-    borderWidth: 2,
-    borderColor: '#4CAF50',
+    backgroundColor: '#2a2a2a',
+    borderWidth: 5,
+    borderColor: '#fff',
   },
   closeButtonText: {
     color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: 20,
+    fontWeight: 'bold',
   },
 });
 

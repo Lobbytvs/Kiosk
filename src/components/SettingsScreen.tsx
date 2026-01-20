@@ -84,6 +84,8 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({
               ]}
               onPress={handleSave}
               focusable={true}
+              accessible={true}
+              hasTVPreferredFocus={true}
               onFocus={() => setFocusedButton('save')}
               onBlur={() => setFocusedButton(null)}>
               <Text style={styles.saveButtonText}>Save & Reload</Text>
@@ -96,6 +98,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({
               ]}
               onPress={onClose}
               focusable={true}
+              accessible={true}
               onFocus={() => setFocusedButton('cancel')}
               onBlur={() => setFocusedButton(null)}>
               <Text style={styles.cancelButtonText}>Cancel</Text>
@@ -155,34 +158,39 @@ const styles = StyleSheet.create({
   },
   saveButton: {
     backgroundColor: '#4CAF50',
-    padding: 15,
+    padding: 25,
     borderRadius: 8,
     alignItems: 'center',
+    borderWidth: 3,
+    borderColor: 'transparent',
   },
   saveButtonFocused: {
-    backgroundColor: '#66BB6A',
-    borderWidth: 3,
+    backgroundColor: '#4CAF50',
+    borderWidth: 5,
     borderColor: '#fff',
   },
   saveButtonText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: 'bold',
   },
   cancelButton: {
     backgroundColor: '#555',
-    padding: 15,
+    padding: 25,
     borderRadius: 8,
     alignItems: 'center',
+    borderWidth: 3,
+    borderColor: 'transparent',
   },
   cancelButtonFocused: {
-    backgroundColor: '#666',
-    borderWidth: 3,
+    backgroundColor: '#555',
+    borderWidth: 5,
     borderColor: '#fff',
   },
   cancelButtonText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 20,
+    fontWeight: 'bold',
   },
 });
 
