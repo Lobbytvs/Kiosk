@@ -17,10 +17,13 @@ A React Native application for Android TV (specifically Xiaomi Mi Box S Gen 3) t
 
 ## Technical Requirements
 
-- React Native 0.73+
+- **react-native-tvos 0.73.7** (community fork with Android TV support)
 - Target Android 9.0+ (API 28+)
 - Support for Android TV/Mi Box S
-- Optimize for TV input (remote control)
+- Full Android TV remote control (D-pad navigation)
+- Works on both Android TV and regular Android phones
+
+**Note:** This app uses `react-native-tvos` instead of standard `react-native`. Standard React Native removed TV support in v0.62 (March 2020). The `react-native-tvos` fork adds back Android TV and Apple TV support, enabling proper remote control navigation.
 
 ## Project Structure
 
@@ -121,9 +124,14 @@ The app includes a hidden menu that can be accessed without exiting kiosk mode:
 
 1. **Press the back button 5 times quickly** (within 3 seconds)
 2. A side menu will slide in from the left
-3. From the menu you can:
+3. **Navigate with your TV remote:**
+   - Use **arrow down/up** on the D-pad to move between menu items
+   - The focused button will have a **green background** and **white border**
+   - Press **OK/Enter/Select** to choose an option
+4. Menu options:
    - **Settings**: Change the kiosk URL without rebuilding the app
    - **Exit App**: Close the application
+   - **Close Menu**: Return to the kiosk view
 
 ### Changing the Kiosk URL
 
