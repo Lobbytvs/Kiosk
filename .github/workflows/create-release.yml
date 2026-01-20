@@ -1,12 +1,15 @@
-name: Create Release
+name: Build and Release APK
 
 on:
+  push:
+    branches:
+      - 'claude/**'
+      - 'main'
   workflow_dispatch:
     inputs:
       version:
         description: 'Release version (e.g., 1.0.0)'
-        required: true
-        default: '1.0.0'
+        required: false
 
 jobs:
   release:
@@ -17,15 +20,26 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate version number
+        id: version
+        run: |
+          if [ -n "${{ github.event.inputs.version }}" ]; then
+            echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+          else
+            # Auto-generate version from date and run number
+            echo "VERSION=$(date +%Y.%m.%d).${{ github.run_number }}" >> $GITHUB_OUTPUT
+          fi
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-          cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --legacy-peer-deps
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -54,34 +68,40 @@ jobs:
           cd android
           ./gradlew assembleRelease --no-daemon
 
+      - name: Rename APK with version
+        run: |
+          cp android/app/build/outputs/apk/release/app-release.apk \
+             android/app/build/outputs/apk/release/AndroidTVKiosk-v${{ steps.version.outputs.VERSION }}.apk
+
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: v${{ github.event.inputs.version }}
-          name: Release v${{ github.event.inputs.version }}
+          tag_name: v${{ steps.version.outputs.VERSION }}
+          name: Release v${{ steps.version.outputs.VERSION }}
           body: |
-            ## Android TV Kiosk App v${{ github.event.inputs.version }}
+            ## Android TV Kiosk App v${{ steps.version.outputs.VERSION }}
+
+            **Build:** ${{ github.run_number }}
+            **Commit:** ${{ github.sha }}
 
             ### Features
-            - Display configurable web URL in fullscreen
-            - In-app settings menu (5 back presses)
-            - Persistent configuration
+            - Native Android AlertDialog menu with TV remote D-pad navigation
+            - Press back 5 times to open menu
+            - Settings to change kiosk URL
             - Auto-start on device boot
-            - Kiosk mode with menu access
-            - Screen wake lock
+            - Fullscreen kiosk mode
 
             ### Installation
-            1. Download `app-release.apk` below
-            2. Transfer to your Android TV
-            3. Install using a file manager
-            4. Press back button 5 times to access settings
-            5. Enter your URL and enjoy!
+            1. Download `AndroidTVKiosk-v${{ steps.version.outputs.VERSION }}.apk` below
+            2. Install on your Android TV or Android phone
+            3. Press back button 5 times to access settings
+            4. Use D-pad arrows to navigate menu items
 
             ### Requirements
             - Android 9.0+ (API 28+)
             - Works on Android TV and Android phones
           files: |
-            android/app/build/outputs/apk/release/app-release.apk
+            android/app/build/outputs/apk/release/AndroidTVKiosk-v${{ steps.version.outputs.VERSION }}.apk
           draft: false
           prerelease: false
         env:
