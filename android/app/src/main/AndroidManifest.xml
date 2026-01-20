@@ -36,6 +36,12 @@
         </intent-filter>
       </activity>
 
+      <!-- Compose Menu Activity for TV Navigation -->
+      <activity
+        android:name=".ComposeMenuActivity"
+        android:theme="@android:style/Theme.Translucent.NoTitleBar"
+        android:exported="false" />
+
       <!-- Boot Receiver -->
       <receiver
         android:name=".BootReceiver"
