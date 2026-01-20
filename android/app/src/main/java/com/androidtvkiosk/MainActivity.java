@@ -40,9 +40,8 @@ public class MainActivity extends ReactActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        // Block home button, back button, recent apps
+        // Block home button and recent apps (but allow back button for React Native to handle)
         if (keyCode == KeyEvent.KEYCODE_HOME ||
-            keyCode == KeyEvent.KEYCODE_BACK ||
             keyCode == KeyEvent.KEYCODE_APP_SWITCH) {
             return true;
         }
@@ -51,7 +50,7 @@ public class MainActivity extends ReactActivity {
 
     @Override
     public void onBackPressed() {
-        // Disable back button
-        // Do nothing
+        // Let React Native BackHandler handle the back button
+        super.onBackPressed();
     }
 }
