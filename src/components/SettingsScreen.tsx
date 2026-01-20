@@ -24,6 +24,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({
   currentUrl,
 }) => {
   const [url, setUrl] = useState(currentUrl);
+  const [focusedButton, setFocusedButton] = useState<string | null>(null);
 
   const handleSave = async () => {
     if (!url.trim()) {
@@ -68,6 +69,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({
             autoCapitalize="none"
             autoCorrect={false}
             keyboardType="url"
+            autoFocus={true}
           />
 
           <Text style={styles.hint}>
@@ -75,11 +77,27 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({
           </Text>
 
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+            <TouchableOpacity
+              style={[
+                styles.saveButton,
+                focusedButton === 'save' && styles.saveButtonFocused,
+              ]}
+              onPress={handleSave}
+              focusable={true}
+              onFocus={() => setFocusedButton('save')}
+              onBlur={() => setFocusedButton(null)}>
               <Text style={styles.saveButtonText}>Save & Reload</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.cancelButton} onPress={onClose}>
+            <TouchableOpacity
+              style={[
+                styles.cancelButton,
+                focusedButton === 'cancel' && styles.cancelButtonFocused,
+              ]}
+              onPress={onClose}
+              focusable={true}
+              onFocus={() => setFocusedButton('cancel')}
+              onBlur={() => setFocusedButton(null)}>
               <Text style={styles.cancelButtonText}>Cancel</Text>
             </TouchableOpacity>
           </View>
@@ -141,6 +159,11 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
   },
+  saveButtonFocused: {
+    backgroundColor: '#66BB6A',
+    borderWidth: 3,
+    borderColor: '#fff',
+  },
   saveButtonText: {
     color: '#fff',
     fontSize: 16,
@@ -151,6 +174,11 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 8,
     alignItems: 'center',
+  },
+  cancelButtonFocused: {
+    backgroundColor: '#666',
+    borderWidth: 3,
+    borderColor: '#fff',
   },
   cancelButtonText: {
     color: '#fff',

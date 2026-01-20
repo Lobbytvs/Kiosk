@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -24,6 +24,7 @@ const SideMenu: React.FC<SideMenuProps> = ({
   onExitApp,
 }) => {
   const slideAnim = React.useRef(new Animated.Value(-300)).current;
+  const [focusedItem, setFocusedItem] = useState<string | null>(null);
 
   React.useEffect(() => {
     if (visible) {
@@ -80,23 +81,46 @@ const SideMenu: React.FC<SideMenuProps> = ({
           </View>
 
           <TouchableOpacity
-            style={styles.menuItem}
+            style={[
+              styles.menuItem,
+              focusedItem === 'settings' && styles.menuItemFocused,
+            ]}
             onPress={() => {
               onClose();
               onOpenSettings();
-            }}>
+            }}
+            focusable={true}
+            hasTVPreferredFocus={true}
+            onFocus={() => setFocusedItem('settings')}
+            onBlur={() => setFocusedItem(null)}>
             <Text style={styles.menuItemText}>⚙️ Settings</Text>
             <Text style={styles.menuItemSubtext}>Change kiosk URL</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.menuItem} onPress={onExitApp}>
+          <TouchableOpacity
+            style={[
+              styles.menuItem,
+              focusedItem === 'exit' && styles.menuItemFocused,
+            ]}
+            onPress={onExitApp}
+            focusable={true}
+            onFocus={() => setFocusedItem('exit')}
+            onBlur={() => setFocusedItem(null)}>
             <Text style={[styles.menuItemText, styles.exitText]}>
               🚪 Exit App
             </Text>
             <Text style={styles.menuItemSubtext}>Close the kiosk</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+          <TouchableOpacity
+            style={[
+              styles.closeButton,
+              focusedItem === 'close' && styles.closeButtonFocused,
+            ]}
+            onPress={onClose}
+            focusable={true}
+            onFocus={() => setFocusedItem('close')}
+            onBlur={() => setFocusedItem(null)}>
             <Text style={styles.closeButtonText}>✕ Close Menu</Text>
           </TouchableOpacity>
         </Animated.View>
@@ -142,6 +166,11 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#2a2a2a',
   },
+  menuItemFocused: {
+    backgroundColor: '#3a3a3a',
+    borderLeftWidth: 4,
+    borderLeftColor: '#4CAF50',
+  },
   menuItemText: {
     fontSize: 18,
     fontWeight: '600',
@@ -164,6 +193,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#2a2a2a',
     borderRadius: 8,
     alignItems: 'center',
+  },
+  closeButtonFocused: {
+    backgroundColor: '#3a3a3a',
+    borderWidth: 2,
+    borderColor: '#4CAF50',
   },
   closeButtonText: {
     color: '#fff',
